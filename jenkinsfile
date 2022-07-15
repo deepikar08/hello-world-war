@@ -24,9 +24,7 @@ pipeline {
  stage('deploy') {
            parallel {
                 stage('deploy server1') {
-                    agent {
-                        label "tomnode"
-                    }
+                    agent { label 'tomnode' }
                     steps {
                         sh 'curl -u admin:Devops@123 -O http://13.126.248.164:8081/artifactory/maven/hello-world-war-${BUILD_NUMBER}.war'
                         sh 'sudo cp -r hello-world-war-${BUILD_NUMBER}.war /opt/apache-tomcat-9.0.64/webapps/'
@@ -35,9 +33,7 @@ pipeline {
                     }
                 }
                  stage('deploy server2') {
-                    agent {
-                        label "tom"
-                    }
+                    agent { label 'tom' }
                     steps {
                         sh 'curl -u admin:Devops@123 -O http://13.126.248.164:8081/artifactory/maven/hello-world-war-${BUILD_NUMBER}.war'
                         sh 'sudo cp -r hello-world-war-${BUILD_NUMBER}.war /opt/apache-tomcat-9.0.64/webapps/'
