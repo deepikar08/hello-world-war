@@ -23,23 +23,27 @@ pipeline {
         }
  stage('deploy') {
            parallel {
+            script {
+              if( params.deploy_indicator ) {
                 stage('deploy server1') {
                     agent { label 'tomnode' }
-                    steps {
-                        sh 'curl -u admin:Devops@123 -O http://13.126.248.164:8081/artifactory/maven/hello-world-war-${BUILD_NUMBER}.war'
-                        sh 'sudo cp -r hello-world-war-${BUILD_NUMBER}.war /opt/apache-tomcat-9.0.64/webapps/'
-                        sh 'sudo  sh /opt/apache-tomcat-9.0.64/bin/shutdown.sh'
-                        sh 'sudo  sh /opt/apache-tomcat-9.0.64/bin/startup.sh'
+                                steps {
+                                    sh 'curl -u admin:Devops@123 -O http://13.126.248.164:8081/artifactory/maven/hello-world-war-${BUILD_NUMBER}.war'
+                                    sh 'sudo cp -r hello-world-war-${BUILD_NUMBER}.war /opt/apache-tomcat-9.0.64/webapps/'
+                                    sh 'sudo  sh /opt/apache-tomcat-9.0.64/bin/shutdown.sh'
+                                    sh 'sudo  sh /opt/apache-tomcat-9.0.64/bin/startup.sh'
+                                }
                     }
-                }
+                 }
                  stage('deploy server2') {
                     agent { label 'tom' }
-                    steps {
+                      steps {
                         sh 'curl -u admin:Devops@123 -O http://13.126.248.164:8081/artifactory/maven/hello-world-war-${BUILD_NUMBER}.war'
                         sh 'sudo cp -r hello-world-war-${BUILD_NUMBER}.war /opt/apache-tomcat-9.0.64/webapps/'
                         sh 'sudo  sh /opt/apache-tomcat-9.0.64/bin/shutdown.sh'
                         sh 'sudo  sh /opt/apache-tomcat-9.0.64/bin/startup.sh'
-                   }
+                      }
+                    }
                 }    
              }
           }
